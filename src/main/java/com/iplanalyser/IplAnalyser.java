@@ -1,5 +1,8 @@
 package com.iplanalyser;
 
+import com.csvreader.CSVBuilderFactory;
+import com.csvreader.ICSVBuilder;
+import com.csvreader.OpenCSVBuilder;
 import com.google.gson.Gson;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
@@ -23,15 +26,14 @@ public class IplAnalyser {
         this.sortedMap.put(SortedField.MAXIMUM_FOURS_AND_SIXES,Comparator.comparing(iplstat -> iplstat.fours + iplstat.sixes));
         Comparator<IplRunsCSV> foursAndSixesComparator = Comparator.comparing(iplstat -> iplstat.fours + iplstat.sixes);
         this.sortedMap.put(SortedField.FOURS_AND_SIXES_WITH_STRIKE_RATE,foursAndSixesComparator.thenComparing(iplstat -> iplstat.strikeRate ));
+        Comparator<IplRunsCSV> averageWithStrikeRateComparator = Comparator.comparing(iplstat -> iplstat.battingAvg);
+        this.sortedMap.put(SortedField.AVERAGE_WITH_STRIKE_RATE,averageWithStrikeRateComparator.thenComparing(iplstat -> iplstat.strikeRate));
     }
 
     public int loadIplData(String csvFilePath) {
         try(Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));){
-            CsvToBeanBuilder<IplRunsCSV> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
-            csvToBeanBuilder.withType(IplRunsCSV.class);
-            csvToBeanBuilder.withIgnoreLeadingWhiteSpace(true);
-            CsvToBean<IplRunsCSV> csvToBean = csvToBeanBuilder.build();
-            Iterator<IplRunsCSV> iplRunsCSVIterator = csvToBean.iterator();
+            ICSVBuilder icsvBuilder = CSVBuilderFactory.createCSVBuilder();
+            Iterator<IplRunsCSV> iplRunsCSVIterator = icsvBuilder.getCSVFileIterator(reader, IplRunsCSV.class);
             int numOfEateries=0;
             while (iplRunsCSVIterator.hasNext()) {
                 numOfEateries++;

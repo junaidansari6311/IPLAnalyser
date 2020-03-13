@@ -53,4 +53,15 @@ public class IplAnalyserTest {
             Assert.assertEquals("Andre Russell", mostRunCsv[0].playerName);
         }catch (IplAnalyserException e){}
     }
+
+    @Test
+    public void givenIplMostRunData_WhenSortedWithAverageAndStrikeRate_ShouldReturnPlayerName() {
+        try {
+            iplAnalyser.loadIplData(IPL_MOST_RUNS_FILE_PATH);
+            String sortedCricketData = iplAnalyser.getSortedCricketData(SortedField.AVERAGE_WITH_STRIKE_RATE);
+            IplRunsCSV[] mostRunCsv = new Gson().fromJson(sortedCricketData, IplRunsCSV[].class);
+            Assert.assertEquals("MS Dhoni", mostRunCsv[0].playerName);
+        }catch (IplAnalyserException e){}
+    }
+
 }
