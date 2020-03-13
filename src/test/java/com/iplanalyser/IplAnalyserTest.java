@@ -15,12 +15,22 @@ public class IplAnalyserTest {
     }
 
     @Test
-    public void givenCricketMostRunData_WhenSorted_ShouldReturnMostRun() {
+    public void givenIplMostRunData_WhenSortedWithBattingAvg_ShouldReturnPlayerName() {
         try {
             iplAnalyser.loadIplData(IPL_MOST_RUNS_FILE_PATH);
             String sortedCricketData = iplAnalyser.getSortedCricketData(SortedField.AVERAGE);
             IplRunsCSV[] mostRunCsv = new Gson().fromJson(sortedCricketData, IplRunsCSV[].class);
-            Assert.assertEquals(83.2, mostRunCsv[0].battingAvg, 0.0);
+            Assert.assertEquals("MS Dhoni", mostRunCsv[0].playerName);
+        }catch (IplAnalyserException e){}
+    }
+
+    @Test
+    public void givenIplMostRunData_WhenSortedWithStrikeRate_ShouldReturnPlayerName() {
+        try {
+            iplAnalyser.loadIplData(IPL_MOST_RUNS_FILE_PATH);
+            String sortedCricketData = iplAnalyser.getSortedCricketData(SortedField.STRIKE_RATE);
+            IplRunsCSV[] mostRunCsv = new Gson().fromJson(sortedCricketData, IplRunsCSV[].class);
+            Assert.assertEquals("Ishant Sharma", mostRunCsv[0].playerName);
         }catch (IplAnalyserException e){}
     }
 }
