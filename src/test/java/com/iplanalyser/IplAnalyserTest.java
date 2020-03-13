@@ -33,4 +33,14 @@ public class IplAnalyserTest {
             Assert.assertEquals("Ishant Sharma", mostRunCsv[0].playerName);
         }catch (IplAnalyserException e){}
     }
+
+    @Test
+    public void givenIplMostRunData_WhenSortedWithMaximumFoursAndSixes_ShouldReturnPlayerName() {
+        try {
+            iplAnalyser.loadIplData(IPL_MOST_RUNS_FILE_PATH);
+            String sortedCricketData = iplAnalyser.getSortedCricketData(SortedField.MAXIMUM_FOURS_AND_SIXES);
+            IplRunsCSV[] mostRunCsv = new Gson().fromJson(sortedCricketData, IplRunsCSV[].class);
+            Assert.assertEquals("Andre Russell", mostRunCsv[0].playerName);
+        }catch (IplAnalyserException e){}
+    }
 }
