@@ -28,6 +28,8 @@ public class IplAnalyser {
         this.sortedMap.put(SortedField.FOURS_AND_SIXES_WITH_STRIKE_RATE,foursAndSixesComparator.thenComparing(iplstat -> iplstat.strikeRate ));
         Comparator<IplRunsCSV> averageWithStrikeRateComparator = Comparator.comparing(iplstat -> iplstat.battingAvg);
         this.sortedMap.put(SortedField.AVERAGE_WITH_STRIKE_RATE,averageWithStrikeRateComparator.thenComparing(iplstat -> iplstat.strikeRate));
+        Comparator<IplRunsCSV> runsWithAverage = Comparator.comparing(iplstat -> iplstat.runs);
+        this.sortedMap.put(SortedField.MAXIMUM_RUNS_WITH_AVERAGE,runsWithAverage.thenComparing(iplstat -> iplstat.battingAvg));
     }
 
     public int loadIplData(String csvFilePath) {
