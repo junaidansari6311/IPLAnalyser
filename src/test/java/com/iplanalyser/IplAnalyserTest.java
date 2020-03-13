@@ -10,7 +10,7 @@ public class IplAnalyserTest {
     private static final String IPL_MOST_RUNS_FILE_PATH = "./src/test/resources/IPL2019FactsheetMostRuns.csv";
 
     @BeforeClass
-    public static void setUp() throws Exception {
+    public static void setUp() throws RuntimeException {
         iplAnalyser = new IplAnalyser();
     }
 
@@ -39,6 +39,16 @@ public class IplAnalyserTest {
         try {
             iplAnalyser.loadIplData(IPL_MOST_RUNS_FILE_PATH);
             String sortedCricketData = iplAnalyser.getSortedCricketData(SortedField.MAXIMUM_FOURS_AND_SIXES);
+            IplRunsCSV[] mostRunCsv = new Gson().fromJson(sortedCricketData, IplRunsCSV[].class);
+            Assert.assertEquals("Andre Russell", mostRunCsv[0].playerName);
+        }catch (IplAnalyserException e){}
+    }
+
+    @Test
+    public void givenIplMostRunData_WhenSortedWithFoursSixesAndStrikeRate_ShouldReturnPlayerName() {
+        try {
+            iplAnalyser.loadIplData(IPL_MOST_RUNS_FILE_PATH);
+            String sortedCricketData = iplAnalyser.getSortedCricketData(SortedField.FOURS_AND_SIXES_WITH_STRIKE_RATE);
             IplRunsCSV[] mostRunCsv = new Gson().fromJson(sortedCricketData, IplRunsCSV[].class);
             Assert.assertEquals("Andre Russell", mostRunCsv[0].playerName);
         }catch (IplAnalyserException e){}
